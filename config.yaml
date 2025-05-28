@@ -1,0 +1,14 @@
+
+Mask_Promo: true
+Print_Invalid: true
+Update_Title: true
+
+Use_Custom_Proxy: false
+Proxy: [""]
+
+# Rate limiting settings
+Request_Delay: 2.5  # Delay between requests in seconds (2.5 = 2500ms)
+Max_Concurrent_Requests: 1  # Maximum concurrent requests to avoid rate limiting
+Retry_Delay: 5  # Initial retry delay for rate limits (will use exponential backoff)
+Force_Sequential: true  # Force sequential processing to prevent rate limiting (recommended)
+
