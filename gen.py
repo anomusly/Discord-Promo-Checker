@@ -30,7 +30,6 @@ def analyze_promo_patterns(sample_file=None):
         'char_frequency': {}
     }
 
-    # If sample file provided, analyze it for better patterns
     if sample_file and os.path.exists(sample_file):
         try:
             with open(sample_file, 'r', encoding='utf-8') as f:
@@ -45,11 +44,9 @@ def analyze_promo_patterns(sample_file=None):
                         codes.append(code)
 
             if codes:
-                # Analyze actual patterns
                 lengths = [len(code) for code in codes]
-                patterns['length'] = max(set(lengths), key=lengths.count)  # Most common length
+                patterns['length'] = max(set(lengths), key=lengths.count)
 
-                # Character frequency analysis
                 all_chars = ''.join(codes)
                 char_counts = {}
                 for char in all_chars:
@@ -69,12 +66,10 @@ def analyze_promo_patterns(sample_file=None):
 def generate_promo_code(patterns, use_frequency=True):
     """Generate a single promo code based on analyzed patterns"""
     if use_frequency and patterns.get('char_frequency'):
-        # Use weighted selection based on character frequency
         chars = list(patterns['char_frequency'].keys())
         weights = list(patterns['char_frequency'].values())
         code = ''.join(random.choices(chars, weights=weights, k=patterns['length']))
     else:
-        # Use uniform random selection
         code = ''.join(random.choice(patterns['characters']) for _ in range(patterns['length']))
 
     full_url = patterns['base_url'] + code
@@ -85,16 +80,14 @@ def generate_multiple_promos(count, patterns, use_frequency=True, show_progress=
     generated_codes = set()
     promos = []
 
-    progress_interval = max(1, count // 20)  # Show progress every 5%
+    progress_interval = max(1, count // 20)
 
     while len(promos) < count:
         new_promo = generate_promo_code(patterns, use_frequency)
-        # Ensure uniqueness
         if new_promo not in generated_codes:
             generated_codes.add(new_promo)
             promos.append(new_promo)
 
-            # Show progress
             if show_progress and len(promos) % progress_interval == 0:
                 progress = (len(promos) / count) * 100
                 print_log('>', f'Progress: {progress:.1f}% ({len(promos)}/{count})', Fore.CYAN)
@@ -148,12 +141,10 @@ def get_user_input():
     if not filename.strip():
         filename = 'generated_promos.txt'
 
-    # Ask about sample file for pattern analysis
     sample_file = input(f'{Style.BRIGHT}{Fore.WHITE}[{Fore.BLUE}?{Fore.WHITE}] {Fore.MAGENTA}- {Fore.WHITE}Sample file for pattern analysis (optional, press Enter to skip): {Fore.RED}>>> {Fore.WHITE}')
     if not sample_file.strip():
         sample_file = None
 
-    # Ask about generation mode
     use_frequency = True
     if sample_file:
         freq_choice = input(f'{Style.BRIGHT}{Fore.WHITE}[{Fore.BLUE}?{Fore.WHITE}] {Fore.MAGENTA}- {Fore.WHITE}Use frequency-based generation? (y/n, default: y): {Fore.RED}>>> {Fore.WHITE}')
@@ -164,12 +155,10 @@ def get_user_input():
 def main():
     display_banner()
 
-    # Get user input
     count, filename, sample_file, use_frequency = get_user_input()
 
     print('')
 
-    # Analyze patterns from existing codes
     patterns = analyze_promo_patterns(sample_file)
 
     print_log('>', f'Pattern Analysis Complete', Fore.GREEN)
@@ -186,21 +175,18 @@ def main():
 
     start_time = time.time()
 
-    # Generate promo codes
     try:
         promos = generate_multiple_promos(count, patterns, use_frequency)
         generation_time = time.time() - start_time
 
         print_log('+', f'Generated {len(promos)} unique promo codes in {generation_time:.2f}s', Fore.GREEN)
 
-        # Save to file
         if save_promos_to_file(promos, filename):
             print_log('+', f'Saved to file: {filename}', Fore.GREEN)
         else:
             print_log('!', 'Failed to save to file', Fore.RED)
             return
 
-        # Display some examples
         print('')
         print_log('>', 'Sample generated codes:', Fore.CYAN)
         for i, promo in enumerate(promos[:5]):
