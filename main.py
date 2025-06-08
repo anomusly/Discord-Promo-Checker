@@ -16,7 +16,6 @@ try:os.system('cls')
 except:pass
 from datetime import datetime, timezone
 
-# Create necessary directories if they don't exist
 if not os.path.exists('output'):
     os.makedirs('output')
 if not os.path.exists('input'):
@@ -36,7 +35,6 @@ try:
    update_ttl = config["Update_Title"]
    u_cus_proxy = config["Use_Custom_Proxy"]
    proxy = config["Proxy"]
-   # Rate limiting configuration
    request_delay = config.get("Request_Delay", 2.5)
    max_concurrent = config.get("Max_Concurrent_Requests", 1)
    retry_delay = config.get("Retry_Delay", 5)
@@ -46,7 +44,6 @@ except:
     time.sleep(10)
     sys.exit(0)
 
-# Global rate limiting controls
 rate_limit_semaphore = Semaphore(max_concurrent)
 last_request_time = 0
 request_lock = Lock()
@@ -70,15 +67,12 @@ def rate_limit_request():
         current_time = time.time()
         time_since_last = current_time - last_request_time
 
-        # Always enforce the minimum delay, regardless of when the last request was made
         if time_since_last < request_delay:
             sleep_time = request_delay - time_since_last
             time.sleep(sleep_time)
 
-        # Update the last request time to now
         last_request_time = time.time()
 
-        # Add a small random jitter to prevent synchronized requests
         import random
         jitter = random.uniform(0.1, 0.3)
         time.sleep(jitter)
@@ -188,22 +182,18 @@ class Checker:
         global ratelimited
         global alr_used
 
-        # Acquire semaphore to limit concurrent requests
         rate_limit_semaphore.acquire()
         try:
-            # Apply rate limiting delay
             rate_limit_request()
 
-            # Make the request
             self.response = self.checksession.get(self.checkurl)
         except Exception as e:
             Sprint('-',f'Internet Or Proxy Issue. Retrying..., Excp: {Fore.YELLOW}{e}',Fore.RED)
-            if retry_count < 3:  # Limit retries to prevent infinite loops
-                time.sleep(2 ** retry_count)  # Exponential backoff
+            if retry_count < 3:
+                time.sleep(2 ** retry_count)
                 return Checker(self.full).checkpromo(retry_count + 1)
             return False
         finally:
-            # Always release the semaphore
             rate_limit_semaphore.release()
         if '"uses"' in self.response.text and self.response.json()["uses"] == 1:
                 with open('output/already_used.txt','a') as f:
@@ -238,12 +228,11 @@ class Checker:
             ratelimited += 1
             update_title(f'Valid: {success}, Already Used: {alr_used}, Invalid: {fails}, Ratelimited: {ratelimited}, User: Buyer')
 
-            # Use exponential backoff for rate limiting
-            backoff_time = retry_delay * (2 ** min(retry_count, 4))  # Cap at 2^4 = 16x multiplier
+            backoff_time = retry_delay * (2 ** min(retry_count, 4)) 
             Sprint('-',f'Ratelimited While Checking, Retrying In {backoff_time}s...: {Fore.YELLOW}{self.full if not mask_promo else self.code[:15]}.',Fore.YELLOW)
             time.sleep(backoff_time)
 
-            if retry_count < 5:  # Limit retries for rate limiting
+            if retry_count < 5:
                 return Checker(self.full).checkpromo(retry_count + 1)
             else:
                 Sprint('-',f'Max retries reached for rate limited promo: {Fore.RED}{self.full if not mask_promo else self.code[:15]}.',Fore.RED)
@@ -267,15 +256,12 @@ def main():
     start = time.time()
 
     if force_sequential:
-        # Force single-threaded execution to prevent rate limiting
         Sprint('!', f'Using sequential processing to prevent rate limiting (requested: {threadsz} threads)', Fore.YELLOW)
 
-        # Process promos sequentially to ensure proper rate limiting
         for i, promo in enumerate(promos):
             Sprint('>', f'Processing promo {i+1}/{len(promos)}', Fore.CYAN)
             proccess(promo)
     else:
-        # Use limited threading with aggressive rate limiting
         effective_threads = min(threadsz, max_concurrent)
         Sprint('!', f'Using {effective_threads} threads with aggressive rate limiting (requested: {threadsz})', Fore.YELLOW)
 
