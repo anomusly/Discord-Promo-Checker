@@ -8,7 +8,7 @@
 
 <p align="center">
   <b>🔥 Advanced Discord Promo Code Checker & Generator — FREE edition</b><br>
-  🎉 Made with ❤️ by <a href="https://github.com/anomusly">@AnomusLY</a> | Discord Id <a href="https://discord.com/users/1136625769628581928">@Anomus.ly</a>
+  🎉 Made with ❤️ by <a href="https://github.com/anomusly">@Hassan</a> | Discord Id <a href="https://discord.com/users/1136625769628581928">@Anomus.ly</a>
 </p>
 
 ---
