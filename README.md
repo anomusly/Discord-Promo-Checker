@@ -40,6 +40,6 @@ Thank you for your generosity! ❤️
 Looking for a personalized tool? DM me on Discord with all the details and your budget!  
 Store: https://axilon.mysellauth.com/
 
-## 🎓 Educational Purpose
+## 🎓 Educational Purpose:
 
 This tool is designed **strictly for educational use**, helping developers
