@@ -25,7 +25,7 @@ Love this tool? Your support helps with further development and maintenance!
 ### **Donate via Litecoin**  
 `Lcahn9iL4KctFwpeDF17VhUA7v9VqHmJfV`  
 
-Thank you for your generosity! ❤️  
+Thank you for your generosity! ❤️
 
 ---
 
