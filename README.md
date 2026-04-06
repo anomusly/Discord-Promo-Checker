@@ -38,7 +38,7 @@ Thank you for your generosity! ❤️
 ## ⚙️ Need a Custom Tool?  
 
 Looking for a personalized tool? DM me on Discord with all the details and your budget!  
-Store: https://axilon.mysellauth.com/
+Store: [https://shop.axilon.app](https://shop.axilon.app)
 
 ## 🎓 Educational Purpose:
 
