@@ -34,7 +34,6 @@ Thank you for your generosity! ❤️
 📩 **DM me on Discord:** `anomus.ly`  
 
 ---
-
 ## ⚙️ Need a Custom Tool?  
 
 Looking for a personalized tool? DM me on Discord with all the details and your budget!  
