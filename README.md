@@ -1,4 +1,4 @@
-# 🎟️ Discord Promotional Code Checker (unmaintained).
+# 🎟️ Discord Promotional Code Checker (unmaintained)
 
 ## 🚀 Setup  
 
